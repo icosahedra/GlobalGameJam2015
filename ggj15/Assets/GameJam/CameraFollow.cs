@@ -17,5 +17,7 @@ public class CameraFollow : MonoBehaviour {
 		currentPosition.z = Smoothing.SpringSmooth(currentPosition.z, targetPosition.z, ref speed.z, 0.5f, Time.deltaTime);
 
 		transform.position = currentPosition;
+		Quaternion targetRotation = target.rotation * Quaternion.AngleAxis(20f, Vector3.right);
+		transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Mathf.Clamp01(Time.deltaTime * 5f));
 	}
 }

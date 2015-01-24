@@ -75,6 +75,10 @@ public class SyncUdpClient : System.IDisposable{
 		return udpClient.Receive();
 	}
 
+	public byte[] GetBuffer(){
+		return udpClient.receiveBuffer;
+	}
+
 	public void SendData(byte[] buffer, int size){
 		
 		udpClient.sendBufferSize = size;

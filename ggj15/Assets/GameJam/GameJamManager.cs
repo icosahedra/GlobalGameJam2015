@@ -32,6 +32,11 @@ public class GameJamManager : MonoBehaviour {
 	}
 
 
+	public void SendData(byte[] data){
+		if(network.Initialized){
+			network.SendData(data, data.Length);
+		}
+	}
 
 	public void SendTestData(){
 
@@ -42,14 +47,19 @@ public class GameJamManager : MonoBehaviour {
 		}
 
 	}
-	
+	public byte[] GetNetData(){
+		if(network.Initialized){
+			return network.GetBuffer();
+		}
+		return null;
+	}
 
 	void Update(){
 		if(network.Initialized){
 			int byteCount = network.ReceiveData();
-			if(byteCount > 0){
-				Debug.Log(byteCount);
-			}
+			//if(byteCount > 0){
+			//	Debug.Log(byteCount);
+			//}
 		}
 	}
 
