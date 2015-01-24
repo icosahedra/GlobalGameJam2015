@@ -46,7 +46,9 @@ public class SyncUdpClient : System.IDisposable{
 
 
 	public void Dispose(){
-		udpClient.Close();
+		if(udpClient != null){
+			udpClient.Close();
+		}
 		status = NetworkStatus.None;
 	}
 
