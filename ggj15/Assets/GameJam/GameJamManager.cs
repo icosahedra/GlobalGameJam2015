@@ -26,10 +26,21 @@ public class GameJamManager : MonoBehaviour {
 
 	byte[] bytes = new byte[200];
 
+
+	void Start(){
+		Application.targetFrameRate = 60;
+	}
+
+
+
 	public void SendTestData(){
+
+
+
 		if(network.Initialized){
 			network.SendData(bytes, 200);
 		}
+
 	}
 	
 
