@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using Icosahedra;
 public class Bird : MonoBehaviour {
 
 	/// Networking
@@ -20,6 +20,13 @@ public class Bird : MonoBehaviour {
 	public Transform gyro;
 	public GameJamManager gjm;
 
+	public AnimationNode flap;
+	public AnimationNode soar;
+	public AnimationNode noise;
+	public AnimationController animationController;
+
+	bool flapping = false;
+
 	void Start(){
 		birdState = new ByteField(objectName, "birdstate", 0);
 		pX = new SingleField(objectName, "position x",0);
@@ -29,10 +36,15 @@ public class Bird : MonoBehaviour {
 		rYaw = new SingleField(objectName, "rotation yaw",0);
 		rPitch = new SingleField(objectName, "rotation pitch",0);
 		rRoll = new SingleField(objectName, "rotation roll",0);
+
+		animationController.AddAnimation(flap);
+		animationController.AddAnimation(soar);
+		//animationController.AddAnimation(noise);
+		animationController.PlayAnimation(soar);
 	}
 
 	void SerializeBird(){
-		networkedBird[0] = birdState.Value;
+		networkedBird[0] = 1;//birdState.Value;
 		Icosahedra.IO.BinaryWriter.FloatToBytes converter = new Icosahedra.IO.BinaryWriter.FloatToBytes();
 
 		converter.value = pX.Value;
@@ -161,15 +173,28 @@ public class Bird : MonoBehaviour {
 	float actualPitch;
 
 	void Respawn(){
-		transform.position = Vector3.zero;
+		transform.position = new Vector3(0,30,0);
 	}
 
 	void OnTriggerEnter(){
 		Respawn();
 	}
 
+	void LateUpdate(){
+		if(actualPitch < -5){
+			animationController.BlendAnimation(flap, 1, 0.5f);
+		}
+		else if(actualPitch > -1){
+			animationController.BlendAnimation(flap, 0, 0.75f);
+		}
+	}
+
 
 	void Update(){
+
+
+
+
 		if(isLocal){
 			LocalControl();
 		}

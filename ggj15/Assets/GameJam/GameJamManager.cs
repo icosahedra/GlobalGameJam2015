@@ -7,6 +7,8 @@ public class GameJamManager : MonoBehaviour {
 
 	
 	SyncUdpClient network = new SyncUdpClient();
+	public UnityEngine.UI.InputField inputField;
+	public Canvas canvas;
 
 	public void Connect(UnityEngine.UI.InputField ipad){
 		IPAddress ip;
@@ -19,7 +21,8 @@ public class GameJamManager : MonoBehaviour {
 		}
 		if(ip != null){
 			if(!network.Initialized){
-			network.Initialize(ip);
+				PlayerPrefs.SetString("lastIP",ipad.text);
+				network.Initialize(ip);
 			}
 		}
 	}	
@@ -29,6 +32,9 @@ public class GameJamManager : MonoBehaviour {
 
 	void Start(){
 		Application.targetFrameRate = 60;
+		if(PlayerPrefs.HasKey("lastIP")){
+			inputField.text = PlayerPrefs.GetString("lastIP");
+		}
 	}
 
 
@@ -54,12 +60,17 @@ public class GameJamManager : MonoBehaviour {
 		return null;
 	}
 
+	void HideUI(){
+		canvas.enabled = false;
+	}
+
 	void Update(){
 		if(network.Initialized){
 			int byteCount = network.ReceiveData();
-			//if(byteCount > 0){
+			if(byteCount > 0){
+				HideUI();
 			//	Debug.Log(byteCount);
-			//}
+			}
 		}
 	}
 

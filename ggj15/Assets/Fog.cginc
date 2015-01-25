@@ -1,7 +1,6 @@
 ﻿uniform float4 _LinearFog;
 
 uniform sampler2D _TextureFog;
-///uniform float4 _TextureFogParams;
 
 uniform float4 _FogDensity;
 uniform float4 _VerticalFog;
@@ -14,9 +13,9 @@ float4 Fog(float3 worldPosition, float3 cameraPosition){
 
 	
 
-	float yVal = smoothstep(_LinearFog.z, _LinearFog.w, worldPosition.y);
-	float xVal = smoothstep(_LinearFog.x, _LinearFog.y, distanceToCamera);
-	float4 textureFog = tex2D(_TextureFog, float2(xVal, yVal));
+	float yValue = smoothstep(_LinearFog.z, _LinearFog.w, worldPosition.y);
+	float xValue = smoothstep(_LinearFog.x, _LinearFog.y, distanceToCamera);
+	float4 textureFog = tex2D(_TextureFog, float2(xValue, yValue));
 
 	float distanceFogDensity =  (smoothstep(_FogDensity.x,_FogDensity.y,distanceToCamera) );
 	distanceFogDensity = _FogDensity.z * sqrt(distanceFogDensity);

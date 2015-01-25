@@ -36,7 +36,9 @@ struct VertexInput {
 struct VertexToFragment {
 
     float4  position : POSITION;
-    float3 color : COLOR1;
+    //float3 color : COLOR1;
+    float4 worldPosition : TEXCOORD0;
+    float3 lightColor : TEXCOORD1;
 
 };
 
@@ -45,31 +47,35 @@ float4 _CubeMap_ST;
 
 float4 _DLight;
 float4 _DLightColor;
-
+float4 _MoonLight;
+float4 _MoonLightColor;
 
 VertexToFragment VertexProgram (VertexInput vertex)
 {
     VertexToFragment output;
 
-    float4 worldPosition = mul(_Object2World, vertex.position);
-    output.position = mul (UNITY_MATRIX_VP, worldPosition);
-    float4 fog = Fog(worldPosition.xyz, _WorldSpaceCameraPos);
+    output.worldPosition = mul(_Object2World, vertex.position);
+    output.position = mul (UNITY_MATRIX_VP, output.worldPosition);
+    //float4 fog = Fog(worldPosition.xyz, _WorldSpaceCameraPos);
 
-    float3 lightColor = half3(1,1,1);
+   // float3 lightColor = half3(1,1,1);
     float3 worldNormal = mul(_Object2World, float4(vertex.normal.xyz, 0));
 
     float3 cubeTex = texCUBE(_CubeMap, worldNormal);
 
     float NDotL = saturate(dot(worldNormal,_DLight));
+    float NDotLMoon = saturate(dot(worldNormal,_MoonLight));
+    output.lightColor = (NDotL*_DLightColor + NDotLMoon*_MoonLightColor)*cubeTex;
 
-    output.color = NDotL*_DLightColor *  cubeTex;//vertex.color.rgb * lightColor*(1-fog.a) + fog.rgb * fog.a;
+    //output.color = NDotL*_DLightColor *  cubeTex;//vertex.color.rgb * lightColor*(1-fog.a) + fog.rgb * fog.a;
     return output;
 }
 
 half4 FragmentProgram (VertexToFragment fragment) : COLOR
 {   
 
-    return half4(fragment.color,1);
+   float4 fog = Fog(fragment.worldPosition.xyz, _WorldSpaceCameraPos);
+    return half4(fragment.lightColor*(1-fog.a) + fog.rgb * fog.a,1);
 }
 
 ENDCG
