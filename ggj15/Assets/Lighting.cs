@@ -22,6 +22,19 @@ public class Lighting : MonoBehaviour {
 	public float dayPercent;
 
 
+	public TimeFog[] fogBlend;
+	Texture2D fogStart;
+	Texture2D fogEnd;
+	float fogBlendValue;
+
+
+	[System.Serializable]
+	public class TimeFog{
+		public Texture2D texture;
+		//public float time;
+	}
+
+
 	[SerializeField] float fogColorCameraZMin;
 	[SerializeField] float fogColorCameraZMax;
 
@@ -69,6 +82,17 @@ public class Lighting : MonoBehaviour {
 	}
 	
 	void UpdateFog(){
+
+		int length = fogBlend.Length;
+		float val = Mathf.Clamp01(dayPercent%1) * length;
+		int start = (int)(val) %length;
+		int end = (start + 1) %length;
+
+		Shader.SetGlobalTexture("_TextureFogStart", fogBlend[start].texture);
+		Shader.SetGlobalTexture("_TextureFogEnd", fogBlend[end].texture);
+		fogBlendValue = Mathf.Clamp01(val - start);
+		Shader.SetGlobalFloat("_TextureFogBlend", fogBlendValue);
+
 		Shader.SetGlobalVector("_LinearFog", new Vector4(fogColorCameraZMin, fogColorCameraZMax, fogColorWorldYMin,fogColorWorldYMax));
 		Shader.SetGlobalVector("_FogDensity", new Vector4(fogDensityCameraZMin, fogDensityCameraZMax, distanceFogScale,verticalFogScale));
 		Shader.SetGlobalVector("_VerticalFog", fogDensityWorldY);
