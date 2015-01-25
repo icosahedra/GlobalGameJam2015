@@ -5,11 +5,17 @@ public class Bird : MonoBehaviour {
 
 	/// Networking
 	public string objectName;
-	byte[] networkedBird = new byte[25];
+	byte[] networkedBird = new byte[50];
 	ByteField birdState;
 	SingleField pX;
 	SingleField pY;
 	SingleField pZ;
+
+	SingleField vX;
+	SingleField vY;
+	SingleField vZ;
+
+	SingleField time;
 
 	SingleField rYaw;
 	SingleField rPitch;
@@ -33,9 +39,15 @@ public class Bird : MonoBehaviour {
 		pY = new SingleField(objectName, "position y",0);
 		pZ = new SingleField(objectName, "position z",0);
 
+		vX = new SingleField(objectName, "velocity x",0);
+		vY = new SingleField(objectName, "velocity y",0);
+		vZ = new SingleField(objectName, "velocity z",0);
+
 		rYaw = new SingleField(objectName, "rotation yaw",0);
 		rPitch = new SingleField(objectName, "rotation pitch",0);
 		rRoll = new SingleField(objectName, "rotation roll",0);
+
+		time = new SingleField(objectName, "time",0);
 
 		animationController.AddAnimation(flap);
 		animationController.AddAnimation(soar);
@@ -82,6 +94,30 @@ public class Bird : MonoBehaviour {
 		networkedBird[22] = converter.byte1;
 		networkedBird[23] = converter.byte2;
 		networkedBird[24] = converter.byte3;
+
+		converter.value = vX.Value;
+		networkedBird[25] = converter.byte0;
+		networkedBird[26] = converter.byte1;
+		networkedBird[27] = converter.byte2;
+		networkedBird[28] = converter.byte3;
+
+		converter.value = vY.Value;
+		networkedBird[29] = converter.byte0;
+		networkedBird[30] = converter.byte1;
+		networkedBird[31] = converter.byte2;
+		networkedBird[32] = converter.byte3;
+
+		converter.value = vZ.Value;
+		networkedBird[33] = converter.byte0;
+		networkedBird[34] = converter.byte1;
+		networkedBird[35] = converter.byte2;
+		networkedBird[36] = converter.byte3;
+
+		converter.value = time.Value;
+		networkedBird[37] = converter.byte0;
+		networkedBird[38] = converter.byte1;
+		networkedBird[39] = converter.byte2;
+		networkedBird[40] = converter.byte3;
 	}
 
 	void DeserializeBird(){
@@ -124,6 +160,30 @@ public class Bird : MonoBehaviour {
 		converter.byte2 = networkedBird[23];
 		converter.byte3 = networkedBird[24];
 		rRoll.Value = converter.value;
+
+		converter.byte0 = networkedBird[25];
+		converter.byte1 = networkedBird[26];
+		converter.byte2 = networkedBird[27];
+		converter.byte3 = networkedBird[28];
+		vX.Value = converter.value;
+
+		converter.byte0 = networkedBird[29];
+		converter.byte1 = networkedBird[30];
+		converter.byte2 = networkedBird[31];
+		converter.byte3 = networkedBird[32];
+		vY.Value = converter.value;
+
+		converter.byte0 = networkedBird[33];
+		converter.byte1 = networkedBird[34];
+		converter.byte2 = networkedBird[35];
+		converter.byte3 = networkedBird[36];
+		vZ.Value = converter.value;
+
+		converter.byte0 = networkedBird[37];
+		converter.byte1 = networkedBird[38];
+		converter.byte2 = networkedBird[39];
+		converter.byte3 = networkedBird[40];
+		time.Value = converter.value;
 	}
 
 	void UpdateNetwork(){
@@ -137,20 +197,36 @@ public class Bird : MonoBehaviour {
 			rPitch.Value = actualPitch;
 			rRoll.Value = roll;
 
+			vX.Value = velocityVector.x;
+			vY.Value = velocityVector.y;
+			vZ.Value = velocityVector.z;
+			time.Value = Time.time;
 			SerializeBird();
 			gjm.SendData(networkedBird);
 		}
 
 	}
 
+	float lastNetworkUpdate = -1;
+
 	void ApplyNetData(){
-		yaw = rYaw.Value;
-		actualPitch = rPitch.Value;
-		roll = rRoll.Value;
 
 
-		transform.rotation = Quaternion.AngleAxis(yaw, Vector3.up) * Quaternion.AngleAxis(actualPitch, Vector3.right) * Quaternion.AngleAxis(roll, Vector3.forward);
-		transform.position = new Vector3(pX.Value, pY.Value, pZ.Value);
+		///should be greater, but fuck it
+		if(time.Value != lastNetworkUpdate){
+			lastNetworkUpdate = time.Value;
+			yaw = rYaw.Value;
+			actualPitch = rPitch.Value;
+			roll = rRoll.Value;
+
+
+			transform.rotation = Quaternion.AngleAxis(yaw, Vector3.up) * Quaternion.AngleAxis(actualPitch, Vector3.right) * Quaternion.AngleAxis(roll, Vector3.forward);
+			transform.position = new Vector3(pX.Value, pY.Value, pZ.Value);
+		}
+		else{
+			transform.position += Time.deltaTime*new Vector3(vX.Value, vY.Value, vZ.Value);
+		}
+		
 	}
 
 	float rollControl = 0;
@@ -158,7 +234,10 @@ public class Bird : MonoBehaviour {
 
 	float roll;
 
-	float velocity = 3f;
+	float normalVelocity = 6f;
+	float descentVelocity = 20f;
+	float ascentVelocity = 3f;
+
 	float currentVelocity = 5f;
 	//v = sqrt(r*g*tan(bank angle))
 	//v^2 = r*g*tan(bank angle)
@@ -171,6 +250,8 @@ public class Bird : MonoBehaviour {
 	float rollSpeed = 0;
 	float pitchSpeed = 0;
 	float actualPitch;
+
+	Vector3 velocityVector;
 
 	void Respawn(){
 		transform.position = new Vector3(0,30,0);
@@ -247,6 +328,33 @@ public class Bird : MonoBehaviour {
 			}
 		}
 
+
+		float maxVelocity = normalVelocity;
+		float acceleration = 1;
+		if(actualPitch > 2){
+			float descent = Mathf.Clamp01(( actualPitch -2f) /8f); ///descent, 0 to 1
+			maxVelocity = normalVelocity +  descent * (descentVelocity-normalVelocity);
+			acceleration = 1 + descent * 10f;
+			
+		}
+		else if(actualPitch < -10){
+			float ascent = Mathf.Clamp01(( -actualPitch -10f) /10f); ///ascent, 0 to 1
+			maxVelocity = ascent * ascentVelocity + (1-ascent)*normalVelocity;
+			acceleration = 1;
+		}
+		else{
+			maxVelocity = normalVelocity;
+			acceleration = 1;
+		}
+
+		currentVelocity = Mathf.Clamp(currentVelocity + Mathf.Clamp01(acceleration*Time.deltaTime), ascentVelocity, descentVelocity);
+
+		float maxVSqr = maxVelocity * maxVelocity;
+		float dragCoef = acceleration / maxVSqr;
+		currentVelocity = currentVelocity - dragCoef*currentVelocity*currentVelocity*Time.deltaTime;
+
+		
+		//Debug.Log(actualPitch + " : " + currentVelocity);
 		//Debug.Log(pitch);
 		//float deltaYaw = Mathf.DeltaAngle(yaw, targetYaw);
 		//roll = Smoothing.SpringSmoothAngle(roll, -Mathf.Clamp(deltaYaw,-45,45), ref rollSpeed, 1, Time.deltaTime);
@@ -265,8 +373,8 @@ public class Bird : MonoBehaviour {
 
 
 
-
-		transform.position += Time.deltaTime* currentVelocity* transform.forward;
+		velocityVector = currentVelocity* transform.forward;
+		transform.position += Time.deltaTime* velocityVector;
 
 
 		UpdateNetwork();
