@@ -21,7 +21,6 @@ public class Lighting : MonoBehaviour {
 	float startTime = 0;
 	public float dayPercent;
 
-
 	public TimeFog[] fogBlend;
 	Texture2D fogStart;
 	Texture2D fogEnd;
@@ -58,9 +57,9 @@ public class Lighting : MonoBehaviour {
 
 	void Update () {
 
-		if(Application.isPlaying){
-			UpdateTime();
-		}
+		//if(Application.isPlaying){
+		//	UpdateTime();
+		//}
 
 		dLightColor = dLightByTime.Evaluate(dayPercent);
 		transform.rotation = Quaternion.AngleAxis(360f*dayPercent -90, Vector3.right);
@@ -81,12 +80,15 @@ public class Lighting : MonoBehaviour {
 		UpdateFog();
 	}
 	
+	int start;
+	int end;
+	float val;
 	void UpdateFog(){
 
 		int length = fogBlend.Length;
-		float val = Mathf.Clamp01(dayPercent%1) * length;
-		int start = (int)(val) %length;
-		int end = (start + 1) %length;
+		 val = Mathf.Clamp01(dayPercent) * (length-1);
+		 start = Mathf.Clamp( (int)(val),0 ,length-1);
+		 end = Mathf.Clamp( (start + 1) ,0, length-1);
 
 		Shader.SetGlobalTexture("_TextureFogStart", fogBlend[start].texture);
 		Shader.SetGlobalTexture("_TextureFogEnd", fogBlend[end].texture);
@@ -101,9 +103,15 @@ public class Lighting : MonoBehaviour {
 		Shader.SetGlobalTexture("_TextureFog", textureFog);
 	}
 
-	void UpdateTime(){
-		float deltaTime = Time.realtimeSinceStartup - startTime;
-		timeOfDay = ((int)(deltaTime*speedMultiplier))%daySeconds;
+	float timeAccumulator = 0;
+	public void UpdateTime(float speed){
+		timeAccumulator = Mathf.Clamp(timeAccumulator + speed*Time.deltaTime, 0, 240);
+		timeOfDay = ((int)(timeAccumulator*speedMultiplier))%daySeconds;
+		dayPercent = (float)timeOfDay / (float)daySeconds;
+	}
+	public void ReverseTime(float speed){
+		timeAccumulator = Mathf.Clamp(timeAccumulator - speed*Time.deltaTime, 0, 240);
+		timeOfDay = ((int)(timeAccumulator*speedMultiplier))%daySeconds;
 		dayPercent = (float)timeOfDay / (float)daySeconds;
 	}
 	

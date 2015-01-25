@@ -4,12 +4,15 @@ using System.Collections;
 public class CameraFollow : MonoBehaviour {
 
 	public Transform target;
+	public Transform secondaryTarget;
 	Vector3 speed = Vector3.zero;
 	public Transform cameraTransform;
 	public Bird bird;
 
 	float minDistance = -7f;
 	float maxDistance = -15f;
+
+	public GameJamManager gjm;
 
 	void LateUpdate () {
 

@@ -3,12 +3,21 @@ using System.Collections;
 using System.Net;
 using Icosahedra.Net;
 
+public enum GameMode{Start, Middle, End, Finished}
+
 public class GameJamManager : MonoBehaviour {
 
 	
 	SyncUdpClient network = new SyncUdpClient();
 	public UnityEngine.UI.InputField inputField;
 	public Canvas canvas;
+
+	public Lighting lightingManager;
+
+	public Bird localBird;
+	public Bird networkedBird;
+
+	GameMode currentMode = GameMode.Start;
 
 	public void Connect(UnityEngine.UI.InputField ipad){
 		IPAddress ip;
@@ -64,6 +73,15 @@ public class GameJamManager : MonoBehaviour {
 		canvas.enabled = false;
 	}
 
+
+	float birdDistance = 1000;
+	public float BirdDistance{
+		get{
+			return birdDistance;
+		}
+	}
+
+
 	void Update(){
 		if(network.Initialized){
 			int byteCount = network.ReceiveData();
@@ -72,6 +90,52 @@ public class GameJamManager : MonoBehaviour {
 			//	Debug.Log(byteCount);
 			}
 		}
+
+		birdDistance = (localBird.transform.position - networkedBird.transform.position).magnitude;
+
+		if(currentMode == GameMode.Start){
+			if(birdDistance < 50){
+				currentMode = GameMode.Middle;
+			}
+		}
+		else if(currentMode == GameMode.Middle){
+			if(birdDistance < 30){
+				if(birdDistance < 10){
+					lightingManager.UpdateTime( 15  );
+				}
+				else{
+					lightingManager.UpdateTime( 5  );
+				}
+			}
+			
+
+			if(birdDistance > 30){
+				if(lightingManager.dayPercent > 0.01f){
+					lightingManager.ReverseTime(6);
+				}
+			}
+			if(lightingManager.dayPercent > 0.75f){
+				currentMode = GameMode.End;
+			}
+		}
+		else if(currentMode == GameMode.End){
+			if(birdDistance < 10){
+				lightingManager.UpdateTime( 5  );
+			}
+			else if(lightingManager.dayPercent > 0.75f){
+				lightingManager.ReverseTime(5);
+			}
+			if(lightingManager.dayPercent > 0.95f){
+				currentMode = GameMode.Finished;
+			}
+		}
+		else if(currentMode == GameMode.Finished){
+			if(lightingManager.dayPercent < 1f){
+				lightingManager.UpdateTime(2);
+			}
+		}
+
+
 	}
 
 	void OnDisable(){
