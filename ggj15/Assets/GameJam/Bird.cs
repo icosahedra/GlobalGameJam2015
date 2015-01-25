@@ -33,6 +33,14 @@ public class Bird : MonoBehaviour {
 
 	bool flapping = false;
 
+	public int playerId;
+
+	public Vector3 player1_startPoint = new Vector3(85, 5, -145);
+	public Vector3 player2_startPoint = new Vector3(93, 5, 123);
+
+
+	public Lighting lightingManager;
+
 	public float VelocityMagnitude {
 		get{
 			return currentVelocity;
@@ -44,6 +52,8 @@ public class Bird : MonoBehaviour {
 		}
 	}
 	void Start(){
+
+		Respawn();
 		birdState = new ByteField(objectName, "birdstate", 0);
 		pX = new SingleField(objectName, "position x",0);
 		pY = new SingleField(objectName, "position y",0);
@@ -129,6 +139,12 @@ public class Bird : MonoBehaviour {
 		networkedBird[38] = converter.byte1;
 		networkedBird[39] = converter.byte2;
 		networkedBird[40] = converter.byte3;
+
+		converter.value = lightingManager.dayPercent;
+		networkedBird[41] = converter.byte0;
+		networkedBird[42] = converter.byte1;
+		networkedBird[43] = converter.byte2;
+		networkedBird[44] = converter.byte3;
 	}
 
 	void DeserializeBird(){
@@ -195,6 +211,12 @@ public class Bird : MonoBehaviour {
 		converter.byte2 = networkedBird[39];
 		converter.byte3 = networkedBird[40];
 		time.Value = converter.value;
+
+		converter.byte0 = networkedBird[41];
+		converter.byte1 = networkedBird[42];
+		converter.byte2 = networkedBird[43];
+		converter.byte3 = networkedBird[44];
+		lightingManager.SetTime(converter.value);
 	}
 
 	void UpdateNetwork(){
@@ -265,7 +287,15 @@ public class Bird : MonoBehaviour {
 	Vector3 velocityVector;
 
 	void Respawn(){
-		transform.position = new Vector3(0,30,0);
+		if(playerId == 0){
+			transform.position = player1_startPoint;
+			transform.rotation = Quaternion.AngleAxis(0, Vector3.up);
+		}
+		else if(playerId == 1){
+			transform.position = player2_startPoint;
+			transform.rotation = Quaternion.AngleAxis(180, Vector3.up);
+		}
+		// = new Vector3(0,30,0);
 	}
 
 	void OnTriggerEnter(){

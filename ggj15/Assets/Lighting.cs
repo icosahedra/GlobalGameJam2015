@@ -62,7 +62,7 @@ public class Lighting : MonoBehaviour {
 		//}
 
 		dLightColor = dLightByTime.Evaluate(dayPercent);
-		transform.rotation = Quaternion.AngleAxis(360f*dayPercent -90, Vector3.right);
+		transform.rotation = Quaternion.AngleAxis(120f*dayPercent -90, Vector3.right);
 
 		moonLightColor = moonLightByTime.Evaluate(dayPercent);
 		moonTransform.rotation = Quaternion.AngleAxis(360f*dayPercent -270 +20, Vector3.right)*Quaternion.AngleAxis(30, Vector3.up);
@@ -113,6 +113,10 @@ public class Lighting : MonoBehaviour {
 		timeAccumulator = Mathf.Clamp(timeAccumulator - speed*Time.deltaTime, 0, 240);
 		timeOfDay = ((int)(timeAccumulator*speedMultiplier))%daySeconds;
 		dayPercent = (float)timeOfDay / (float)daySeconds;
+	}
+
+	public void SetTime(float val){
+		dayPercent = val;
 	}
 	
 }

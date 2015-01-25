@@ -93,45 +93,48 @@ public class GameJamManager : MonoBehaviour {
 
 		birdDistance = (localBird.transform.position - networkedBird.transform.position).magnitude;
 
-		if(currentMode == GameMode.Start){
-			if(birdDistance < 50){
-				currentMode = GameMode.Middle;
-			}
-		}
-		else if(currentMode == GameMode.Middle){
-			if(birdDistance < 30){
-				if(birdDistance < 10){
-					lightingManager.UpdateTime( 15  );
+
+		if(localBird.playerId == 0){
+			if(currentMode == GameMode.Start){
+				if(birdDistance < 100){
+					currentMode = GameMode.Middle;
 				}
-				else{
+			}
+			else if(currentMode == GameMode.Middle){
+				if(birdDistance < 50){
+					if(birdDistance < 10){
+						lightingManager.UpdateTime( 15  );
+					}
+					else{
+						lightingManager.UpdateTime( 5  );
+					}
+				}
+				
+
+				if(birdDistance > 50){
+					if(lightingManager.dayPercent > 0.01f){
+						lightingManager.ReverseTime(6);
+					}
+				}
+				if(lightingManager.dayPercent > 0.75f){
+					currentMode = GameMode.End;
+				}
+			}
+			else if(currentMode == GameMode.End){
+				if(birdDistance < 20){
 					lightingManager.UpdateTime( 5  );
 				}
-			}
-			
-
-			if(birdDistance > 30){
-				if(lightingManager.dayPercent > 0.01f){
-					lightingManager.ReverseTime(6);
+				else if(lightingManager.dayPercent > 0.75f){
+					lightingManager.ReverseTime(5);
+				}
+				if(lightingManager.dayPercent > 0.95f){
+					currentMode = GameMode.Finished;
 				}
 			}
-			if(lightingManager.dayPercent > 0.75f){
-				currentMode = GameMode.End;
-			}
-		}
-		else if(currentMode == GameMode.End){
-			if(birdDistance < 10){
-				lightingManager.UpdateTime( 5  );
-			}
-			else if(lightingManager.dayPercent > 0.75f){
-				lightingManager.ReverseTime(5);
-			}
-			if(lightingManager.dayPercent > 0.95f){
-				currentMode = GameMode.Finished;
-			}
-		}
-		else if(currentMode == GameMode.Finished){
-			if(lightingManager.dayPercent < 1f){
-				lightingManager.UpdateTime(2);
+			else if(currentMode == GameMode.Finished){
+				if(lightingManager.dayPercent < 1f){
+					lightingManager.UpdateTime(2);
+				}
 			}
 		}
 
