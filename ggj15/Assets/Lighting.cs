@@ -12,10 +12,10 @@ public class Lighting : MonoBehaviour {
 	public Transform moonTransform;
 
 	const int daySeconds = 60*60*24;
-	int timeOfDay = 0;
+	 int timeOfDay = 0;
 	float speedMultiplier = 360; //240 second day
 	float startTime = 0;
-	float dayPercent;
+	public float dayPercent;
 
 
 	[SerializeField] float fogColorCameraZMin;
@@ -41,7 +41,10 @@ public class Lighting : MonoBehaviour {
 
 	void Update () {
 
-		UpdateTime();
+		if(Application.isPlaying){
+			UpdateTime();
+		}
+
 		dLightColor = dLightByTime.Evaluate(dayPercent);
 		transform.rotation = Quaternion.AngleAxis(360f*dayPercent -90, Vector3.right);
 

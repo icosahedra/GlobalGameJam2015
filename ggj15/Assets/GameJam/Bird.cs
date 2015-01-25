@@ -33,6 +33,16 @@ public class Bird : MonoBehaviour {
 
 	bool flapping = false;
 
+	public float VelocityMagnitude {
+		get{
+			return currentVelocity;
+		}
+	}
+	public float NormalizedVelocityMagnitude {
+		get{
+			return Mathf.Clamp01(currentVelocity - ascentVelocity)/ (descentVelocity-ascentVelocity);
+		}
+	}
 	void Start(){
 		birdState = new ByteField(objectName, "birdstate", 0);
 		pX = new SingleField(objectName, "position x",0);
@@ -51,8 +61,9 @@ public class Bird : MonoBehaviour {
 
 		animationController.AddAnimation(flap);
 		animationController.AddAnimation(soar);
-		//animationController.AddAnimation(noise);
+		animationController.AddAnimation(noise);
 		animationController.PlayAnimation(soar);
+		animationController.PlayAnimation(noise);
 	}
 
 	void SerializeBird(){
@@ -348,6 +359,8 @@ public class Bird : MonoBehaviour {
 		}
 
 		currentVelocity = Mathf.Clamp(currentVelocity + Mathf.Clamp01(acceleration*Time.deltaTime), ascentVelocity, descentVelocity);
+
+		animationController.SetPlaybackSpeed(noise, 0.25f+Mathf.Clamp01(currentVelocity/normalVelocity-1));
 
 		float maxVSqr = maxVelocity * maxVelocity;
 		float dragCoef = acceleration / maxVSqr;

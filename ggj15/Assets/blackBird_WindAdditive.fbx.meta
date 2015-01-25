@@ -185,9 +185,12 @@ ModelImporter:
     400176: TailBase
     400178: TailFeather01Influence1
     400180: TailFeather02Influence1
+    2300000: blackBird_GEO
+    3300000: blackBird_GEO
     4300000: blackBird_GEO
-    7400000: Take 001
+    7400000: wind
     9500000: //RootNode
+    11100000: //RootNode
     13700000: blackBird_GEO
   materials:
     importMaterials: 1
@@ -204,18 +207,226 @@ ModelImporter:
     animationScaleError: .5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
-    isReadable: 1
+    clipAnimations:
+    - serializedVersion: 16
+      name: wind
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 59
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: blackBird_GEO
+        weight: 1
+      - path: Hips
+        weight: 1
+      - path: Hips/BackFeatherInfluence1
+        weight: 1
+      - path: Hips/LeftArm
+        weight: 1
+      - path: Hips/LeftArm/LeftElbow
+        weight: 1
+      - path: Hips/LeftArm/LeftElbow/LeftFeather08Influence1
+        weight: 1
+      - path: Hips/LeftArm/LeftElbow/LeftFeather09Influence1
+        weight: 1
+      - path: Hips/LeftArm/LeftElbow/LeftFeather10Influence1
+        weight: 1
+      - path: Hips/LeftArm/LeftElbow/LeftSmallFeather02Influence1
+        weight: 1
+      - path: Hips/LeftArm/LeftElbow/LeftSmallFeather03Influence1
+        weight: 1
+      - path: Hips/LeftArm/LeftElbow/LeftWrist
+        weight: 1
+      - path: Hips/LeftArm/LeftElbow/LeftWrist/LeftHand
+        weight: 1
+      - path: Hips/LeftArm/LeftElbow/LeftWrist/LeftHand/LeftFeather01Influence1
+        weight: 1
+      - path: Hips/LeftArm/LeftElbow/LeftWrist/LeftHand/LeftFeather02Influence1
+        weight: 1
+      - path: Hips/LeftArm/LeftElbow/LeftWrist/LeftHand/LeftFeather03Influence1
+        weight: 1
+      - path: Hips/LeftArm/LeftElbow/LeftWrist/LeftHand/LeftFeather04Influence1
+        weight: 1
+      - path: Hips/LeftArm/LeftElbow/LeftWrist/LeftHand/LeftFeather05Influence1
+        weight: 1
+      - path: Hips/LeftArm/LeftElbow/LeftWrist/LeftHand/LeftFeather06Influence1
+        weight: 1
+      - path: Hips/LeftArm/LeftElbow/LeftWrist/LeftHand/LeftFeather07Influence1
+        weight: 1
+      - path: Hips/LeftArm/LeftElbow/LeftWrist/LeftHand/LeftSmallFeather01Influence1
+        weight: 1
+      - path: Hips/LeftArm/LeftFeather11Influence1
+        weight: 1
+      - path: Hips/LeftArm/LeftFeather12Influence1
+        weight: 1
+      - path: Hips/LeftArm/LeftFeather13Influence1
+        weight: 1
+      - path: Hips/LeftArm/LeftFeather14Influence1
+        weight: 1
+      - path: Hips/LeftArm/LeftSmallFeather04Influence1
+        weight: 1
+      - path: Hips/LeftUpLeg
+        weight: 1
+      - path: Hips/LeftUpLeg/LeftLeg
+        weight: 1
+      - path: Hips/LeftUpLeg/LeftLeg/LeftFoot
+        weight: 1
+      - path: Hips/LeftUpLeg/LeftLeg/LeftFoot/LeftFootIndex1
+        weight: 1
+      - path: Hips/LeftUpLeg/LeftLeg/LeftFoot/LeftFootIndex1/LeftFootIndex2
+        weight: 1
+      - path: Hips/LeftUpLeg/LeftLeg/LeftFoot/LeftFootMiddle1
+        weight: 1
+      - path: Hips/LeftUpLeg/LeftLeg/LeftFoot/LeftFootMiddle1/LeftFootMiddle2
+        weight: 1
+      - path: Hips/LeftUpLeg/LeftLeg/LeftFoot/LeftFootPinky1
+        weight: 1
+      - path: Hips/LeftUpLeg/LeftLeg/LeftFoot/LeftFootPinky1/LeftFootPinky2
+        weight: 1
+      - path: Hips/LeftUpLeg/LeftLeg/LeftFoot/LeftToeExtra1
+        weight: 1
+      - path: Hips/LeftUpLeg/LeftLeg/LeftFoot/LeftToeExtra1/LeftToeExtra2
+        weight: 1
+      - path: Hips/LeftUpLeg/LeftLegFeather01Influence1
+        weight: 1
+      - path: Hips/LeftUpLeg/LeftLegFeather02Influence1
+        weight: 1
+      - path: Hips/Neck
+        weight: 1
+      - path: Hips/Neck/Head
+        weight: 1
+      - path: Hips/Neck/Head/HeadFeather01Influence1
+        weight: 1
+      - path: Hips/Neck/Head/HeadFeather02Influence1
+        weight: 1
+      - path: Hips/Neck/Head/Jaw
+        weight: 1
+      - path: Hips/Neck/Head/LeftHeadFeather01Influence1
+        weight: 1
+      - path: Hips/Neck/Head/RightHeadFeather01Influence1
+        weight: 1
+      - path: Hips/Neck/NeckFeathersInfluence1
+        weight: 1
+      - path: Hips/RightArm
+        weight: 1
+      - path: Hips/RightArm/RightElbow
+        weight: 1
+      - path: Hips/RightArm/RightElbow/RightFeather08Influence1
+        weight: 1
+      - path: Hips/RightArm/RightElbow/RightFeather09Influence1
+        weight: 1
+      - path: Hips/RightArm/RightElbow/RightFeather10Influence1
+        weight: 1
+      - path: Hips/RightArm/RightElbow/RightSmallFeather02Influence1
+        weight: 1
+      - path: Hips/RightArm/RightElbow/RightSmallFeather03Influence1
+        weight: 1
+      - path: Hips/RightArm/RightElbow/RightWrist
+        weight: 1
+      - path: Hips/RightArm/RightElbow/RightWrist/RightHand
+        weight: 1
+      - path: Hips/RightArm/RightElbow/RightWrist/RightHand/RightFeather01Influence1
+        weight: 1
+      - path: Hips/RightArm/RightElbow/RightWrist/RightHand/RightFeather02Influence1
+        weight: 1
+      - path: Hips/RightArm/RightElbow/RightWrist/RightHand/RightFeather03Influence1
+        weight: 1
+      - path: Hips/RightArm/RightElbow/RightWrist/RightHand/RightFeather04Influence1
+        weight: 1
+      - path: Hips/RightArm/RightElbow/RightWrist/RightHand/RightFeather05Influence1
+        weight: 1
+      - path: Hips/RightArm/RightElbow/RightWrist/RightHand/RightFeather06Influence1
+        weight: 1
+      - path: Hips/RightArm/RightElbow/RightWrist/RightHand/RightFeather07Influence1
+        weight: 1
+      - path: Hips/RightArm/RightElbow/RightWrist/RightHand/RightSmallFeather01Influence1
+        weight: 1
+      - path: Hips/RightArm/RightFeather11Influence1
+        weight: 1
+      - path: Hips/RightArm/RightFeather12Influence1
+        weight: 1
+      - path: Hips/RightArm/RightFeather13Influence1
+        weight: 1
+      - path: Hips/RightArm/RightFeather14Influence1
+        weight: 1
+      - path: Hips/RightArm/RightSmallFeather04Influence1
+        weight: 1
+      - path: Hips/RightUpLeg
+        weight: 1
+      - path: Hips/RightUpLeg/RightLeg
+        weight: 1
+      - path: Hips/RightUpLeg/RightLeg/RightFoot
+        weight: 1
+      - path: Hips/RightUpLeg/RightLeg/RightFoot/RightFootIndex1
+        weight: 1
+      - path: Hips/RightUpLeg/RightLeg/RightFoot/RightFootIndex1/RightFootIndex2
+        weight: 1
+      - path: Hips/RightUpLeg/RightLeg/RightFoot/RightFootMiddle1
+        weight: 1
+      - path: Hips/RightUpLeg/RightLeg/RightFoot/RightFootMiddle1/RightFootMiddle2
+        weight: 1
+      - path: Hips/RightUpLeg/RightLeg/RightFoot/RightFootPinky1
+        weight: 1
+      - path: Hips/RightUpLeg/RightLeg/RightFoot/RightFootPinky1/RightFootPinky2
+        weight: 1
+      - path: Hips/RightUpLeg/RightLeg/RightFoot/RightToeExtra1
+        weight: 1
+      - path: Hips/RightUpLeg/RightLeg/RightFoot/RightToeExtra1/RightToeExtra2
+        weight: 1
+      - path: Hips/RightUpLeg/RightLegFeather01Influence1
+        weight: 1
+      - path: Hips/RightUpLeg/RightLegFeather02Influence1
+        weight: 1
+      - path: Hips/TailBase
+        weight: 1
+      - path: Hips/TailBase/LeftTailFeather01Influence1
+        weight: 1
+      - path: Hips/TailBase/LeftTailFeather02Influence1
+        weight: 1
+      - path: Hips/TailBase/LeftTailFeather03Influence1
+        weight: 1
+      - path: Hips/TailBase/RightTailFeather01Influence1
+        weight: 1
+      - path: Hips/TailBase/RightTailFeather02Influence1
+        weight: 1
+      - path: Hips/TailBase/RightTailFeather03Influence1
+        weight: 1
+      - path: Hips/TailBase/TailFeather01Influence1
+        weight: 1
+      - path: Hips/TailBase/TailFeather02Influence1
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: .00999999978
+    globalScale: .100000001
     meshCompression: 0
     addColliders: 0
-    importBlendShapes: 1
+    importBlendShapes: 0
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
+    optimizeMeshForGPU: 0
     weldVertices: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
@@ -240,6 +451,6 @@ ModelImporter:
     feetSpacing: 0
     rootMotionBoneName: 
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 1
   additionalBone: 0
   userData: 
