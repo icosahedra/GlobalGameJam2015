@@ -160,6 +160,15 @@ public class Bird : MonoBehaviour {
 	float pitchSpeed = 0;
 	float actualPitch;
 
+	void Respawn(){
+		transform.position = Vector3.zero;
+	}
+
+	void OnTriggerEnter(){
+		Respawn();
+	}
+
+
 	void Update(){
 		if(isLocal){
 			LocalControl();
@@ -199,15 +208,16 @@ public class Bird : MonoBehaviour {
 		roll = Smoothing.SpringSmooth(roll, rollControl*40f, ref rollSpeed, 0.5f, Time.deltaTime);
 		pitch = Smoothing.SpringSmooth(pitch, pitchControl*40f, ref pitchSpeed, 0.5f, Time.deltaTime);
 		actualPitch  = pitch;
-		if(height < 10){
-			if(pitch > 0){
-				float adjustment = Mathf.Clamp01( (height-5)/ 5f);
-				actualPitch =  adjustment*pitch;
-			}
-		}
-		else if(height > 100){
+		//if(height < 10){
+		//	if(pitch > 0){
+		//		float adjustment = Mathf.Clamp01( (height-5)/ 5f);
+		//		actualPitch =  adjustment*pitch;
+		//	}
+		//}
+		//else 
+		if(height > 200){
 			if(pitch < 0){
-				float adjustment = Mathf.Clamp01(1f- (height-100)/ 5f);
+				float adjustment = Mathf.Clamp01(1f- (height-200)/ 5f);
 				actualPitch =  adjustment*pitch;
 			}
 		}
