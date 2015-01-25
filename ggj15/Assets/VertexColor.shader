@@ -49,6 +49,7 @@ float4 _DLight;
 float4 _DLightColor;
 float4 _MoonLight;
 float4 _MoonLightColor;
+float4 _Ambient;
 
 VertexToFragment VertexProgram (VertexInput vertex)
 {
@@ -65,7 +66,7 @@ VertexToFragment VertexProgram (VertexInput vertex)
 
     float NDotL = saturate(dot(worldNormal,_DLight));
     float NDotLMoon = saturate(dot(worldNormal,_MoonLight));
-    output.lightColor = (NDotL*_DLightColor + NDotLMoon*_MoonLightColor)*cubeTex;
+    output.lightColor = (NDotL*_DLightColor.rgb + NDotLMoon*_MoonLightColor.rgb + _Ambient.rgb)*cubeTex;
 
     //output.color = NDotL*_DLightColor *  cubeTex;//vertex.color.rgb * lightColor*(1-fog.a) + fog.rgb * fog.a;
     return output;

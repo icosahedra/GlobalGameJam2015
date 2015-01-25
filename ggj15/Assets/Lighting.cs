@@ -4,11 +4,15 @@ using System.Collections;
 [ExecuteInEditMode]
 public class Lighting : MonoBehaviour {
 
-	public Color dLightColor;
+	Color dLightColor;
 	public Gradient dLightByTime;
 
-	public Color moonLightColor;
+	Color moonLightColor;
 	public Gradient moonLightByTime;
+
+	Color ambientLight;
+	public Gradient ambientByTime;
+
 	public Transform moonTransform;
 
 	const int daySeconds = 60*60*24;
@@ -51,11 +55,15 @@ public class Lighting : MonoBehaviour {
 		moonLightColor = moonLightByTime.Evaluate(dayPercent);
 		moonTransform.rotation = Quaternion.AngleAxis(360f*dayPercent -270 +20, Vector3.right)*Quaternion.AngleAxis(30, Vector3.up);
 
+		ambientLight = ambientByTime.Evaluate(dayPercent);
+
 		Shader.SetGlobalVector("_DLight", -transform.forward);
 		Shader.SetGlobalColor("_DLightColor", dLightColor);
 
 		Shader.SetGlobalVector("_MoonLight", -moonTransform.forward);
 		Shader.SetGlobalColor("_MoonLightColor", moonLightColor);
+
+		Shader.SetGlobalColor("_Ambient", ambientLight);
 
 		UpdateFog();
 	}
